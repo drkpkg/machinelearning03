@@ -13,32 +13,57 @@ class Graph:
         self.graph[u][v] = weight
         self.graph[v][u] = weight
 
-    def get_shortest_path(self, start, end):
+    def breadth_first_search(self, start, goal):
+        queue = [(start, [start])]
+        visited = set([start])
+
+        while queue:
+            node, path = queue.pop(0)
+            if node == goal:
+                return path
+            for neighbor in self.graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append((neighbor, path + [neighbor]))
+
+        return None
+
+    def depth_first_search(self, start, goal):
+        stack = [(start, [start])]
+        visited = set([start])
+
+        while stack:
+            node, path = stack.pop()
+            if node == goal:
+                return path
+            for neighbor in self.graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    stack.append((neighbor, path + [neighbor]))
+
+        return None
+
+    def dijkstra(self, start, goal):
         distances = {node: float('inf') for node in self.graph}
         distances[start] = 0
 
-        # Priority queue to keep track of nodes to visit
         queue = [(0, start)]
 
         while queue:
             current_distance, current_node = heapq.heappop(queue)
 
-            # Ignore if already found a shorter path to current_node
             if current_distance > distances[current_node]:
                 continue
 
-            # Check each neighbor of the current_node
             for neighbor, weight in self.graph[current_node].items():
                 distance = current_distance + weight
 
-                # Update distance if a shorter path is found
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
                     heapq.heappush(queue, (distance, neighbor))
 
-        # Reconstruct the shortest path
         path = []
-        current_node = end
+        current_node = goal
 
         while current_node != start:
             path.append(current_node)
@@ -50,4 +75,4 @@ class Graph:
         path.append(start)
         path.reverse()
 
-        return path, distances[end]
+        return path
