@@ -47,6 +47,9 @@ class Graph:
         distances = {node: float('inf') for node in self.graph}
         distances[start] = 0
 
+        weights = {node: float('inf') for node in self.graph}
+        weights[start] = 0
+
         queue = [(0, start)]
 
         while queue:
@@ -60,6 +63,7 @@ class Graph:
 
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
+                    weights[neighbor] = weights[current_node] + weight
                     heapq.heappush(queue, (distance, neighbor))
 
         path = []
@@ -75,4 +79,4 @@ class Graph:
         path.append(start)
         path.reverse()
 
-        return path
+        return path, weights[goal]

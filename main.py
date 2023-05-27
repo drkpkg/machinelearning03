@@ -79,11 +79,11 @@ while running:
 
     # Display route information
     if selected_node and target_node:
-        dijkstra_route = selected_node.dijkstra(target_node)
+        dijkstra_route, dijkstra_weight = selected_node.dijkstra(target_node)
         depth_first_route = selected_node.depth_first_search(target_node)
         breadth_first_route = selected_node.breadth_first_search(target_node)
 
-        route_text = font.render(f"Dijkstra: {dijkstra_route}   Depth First Search: {depth_first_route}   Breadth First Search: {breadth_first_route}",
+        route_text = font.render(f"Dijkstra: {dijkstra_route}, {dijkstra_weight}  Depth First Search: {depth_first_route}   Breadth First Search: {breadth_first_route}",
                                  True, (0, 0, 0))
         route_text_rect = route_text.get_rect(center=(screen.get_width() // 2, 60))
         screen.blit(route_text, route_text_rect)
