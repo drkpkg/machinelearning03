@@ -16,32 +16,37 @@ class Graph:
     def breadth_first_search(self, start, goal):
         queue = [(start, [start])]
         visited = set([start])
+        weights = {node: 0 for node in self.graph}
 
         while queue:
             node, path = queue.pop(0)
             if node == goal:
-                return path
+                return path, weights[goal]
             for neighbor in self.graph[node]:
                 if neighbor not in visited:
                     visited.add(neighbor)
                     queue.append((neighbor, path + [neighbor]))
+                    weights[neighbor] = weights[node] + self.graph[node][neighbor]
 
-        return None
+        return None, None
+
 
     def depth_first_search(self, start, goal):
         stack = [(start, [start])]
         visited = set([start])
+        weights = {node: 0 for node in self.graph}
 
         while stack:
             node, path = stack.pop()
             if node == goal:
-                return path
+                return path, weights[goal]
             for neighbor in self.graph[node]:
                 if neighbor not in visited:
                     visited.add(neighbor)
                     stack.append((neighbor, path + [neighbor]))
+                    weights[neighbor] = weights[node] + self.graph[node][neighbor]
 
-        return None
+        return None, None
 
     def dijkstra(self, start, goal):
         distances = {node: float('inf') for node in self.graph}
